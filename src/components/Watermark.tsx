@@ -2,14 +2,17 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { STUDENT, examStamp } from '@constants/student';
 import { COLORS } from '@constants/theme';
+import { useCartStore } from '@stores/cartStore';
 
 export function Watermark() {
   const stamp = examStamp();
+  const items = useCartStore((state) => state.items);
+  const totalCount = items.reduce((sum, item) => sum + item.quantity, 0);
 
   return (
     <View style={styles.container} pointerEvents="none">
       <Text style={styles.text}>
-        TH2 · {STUDENT.mssv} · {STUDENT.hoTen} · #{stamp}
+        TH2 · {STUDENT.mssv} · {STUDENT.hoTen} · #{stamp} ({totalCount})
       </Text>
     </View>
   );

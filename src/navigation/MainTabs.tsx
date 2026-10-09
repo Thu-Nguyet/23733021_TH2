@@ -67,8 +67,7 @@ export function MainTabs() {
     <Tab.Navigator
       id="MainTabs"
       screenOptions={{
-        headerStyle: { backgroundColor: COLORS.surface },
-        headerTintColor: COLORS.text,
+        headerShown: false,
         tabBarActiveTintColor: COLORS.primary,
         tabBarInactiveTintColor: COLORS.textLight,
       }}

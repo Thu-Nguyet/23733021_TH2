@@ -41,36 +41,21 @@ export function CartScreen() {
 
   const renderCartItem = ({ item }: { item: CartItem }) => (
     <View style={styles.cartItem}>
-      <Image source={{ uri: item.image }} style={styles.itemImage} resizeMode="contain" />
       <View style={styles.itemInfo}>
         <Text style={styles.itemTitle} numberOfLines={2}>
           {item.title}
         </Text>
         <Text style={styles.itemPrice}>
-          {item.price.toLocaleString('vi-VN')} đ
+          ×{item.quantity} {(item.price * item.quantity).toLocaleString('vi-VN')} đ
         </Text>
-        <View style={styles.qtyRow}>
-          <TouchableOpacity
-            style={styles.qtyBtn}
-            onPress={() => changeQty(item.id, -1)}
-          >
-            <Text style={styles.qtyBtnText}>-</Text>
-          </TouchableOpacity>
-          <Text style={styles.qtyValue}>{item.quantity}</Text>
-          <TouchableOpacity
-            style={styles.qtyBtn}
-            onPress={() => changeQty(item.id, 1)}
-          >
-            <Text style={styles.qtyBtnText}>+</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.removeBtn}
-            onPress={() => removeItem(item.id)}
-          >
-            <Text style={styles.removeBtnText}>Xoá</Text>
-          </TouchableOpacity>
-        </View>
       </View>
+      <TouchableOpacity
+        style={styles.removeBtn}
+        onPress={() => removeItem(item.id)}
+        activeOpacity={0.8}
+      >
+        <Text style={styles.removeBtnText}>✕</Text>
+      </TouchableOpacity>
     </View>
   );
 
@@ -79,15 +64,7 @@ export function CartScreen() {
       {VARIANT.watermarkAtTop && <Watermark />}
 
       <View style={styles.header}>
-        <View>
-          <Text style={styles.headerTitle}>GIỎ HÀNG</Text>
-          <Text style={styles.roomSubtitle}>Giao đến {ROOM_LABEL}</Text>
-        </View>
-        {items.length > 0 && (
-          <TouchableOpacity onPress={clearCart} style={styles.clearBtn}>
-            <Text style={styles.clearBtnText}>Xoá tất cả</Text>
-          </TouchableOpacity>
-        )}
+        <Text style={styles.headerTitle}>GIỎ HÀNG</Text>
       </View>
 
       {items.length === 0 ? (
@@ -118,14 +95,9 @@ export function CartScreen() {
             </Text>
           </View>
 
-          <View style={styles.divider} />
-
-          <View style={styles.summaryRow}>
-            <Text style={styles.totalLabel}>Tổng hàng:</Text>
-            <Text style={styles.totalValue}>
-              {totalAmount.toLocaleString('vi-VN')} đ
-            </Text>
-          </View>
+          <Text style={styles.totalText}>
+            Tổng hàng: {totalAmount.toLocaleString('vi-VN')} đ
+          </Text>
 
           <TouchableOpacity
             style={styles.orderBtn}
@@ -150,105 +122,70 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.background,
   },
   header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    backgroundColor: COLORS.primary,
+    paddingVertical: 14,
     paddingHorizontal: SPACING.md,
-    paddingVertical: SPACING.sm,
-    backgroundColor: COLORS.surface,
-    borderBottomWidth: 1,
-    borderColor: COLORS.border,
+    alignItems: 'center',
+    justifyContent: 'center',
+    elevation: 4,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.15,
+    shadowRadius: 3,
   },
   headerTitle: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: '800',
-    color: COLORS.primary,
-  },
-  roomSubtitle: {
-    fontSize: 12,
-    fontWeight: '600',
-    color: COLORS.secondary,
-    marginTop: 2,
-  },
-  clearBtn: {
-    paddingVertical: 4,
-    paddingHorizontal: 8,
-  },
-  clearBtnText: {
-    fontSize: 12,
-    color: COLORS.error,
-    fontWeight: '600',
+    color: '#FFFFFF',
+    letterSpacing: 1.5,
   },
   listContent: {
-    padding: SPACING.sm,
+    padding: SPACING.md,
     paddingBottom: SPACING.lg,
   },
   cartItem: {
     flexDirection: 'row',
+    justifyContent: 'space-between',
     backgroundColor: COLORS.surface,
     borderRadius: RADIUS.md,
-    padding: SPACING.sm,
+    padding: SPACING.md,
     marginBottom: SPACING.sm,
     borderWidth: 1,
     borderColor: COLORS.border,
     alignItems: 'center',
-  },
-  itemImage: {
-    width: 65,
-    height: 65,
-    borderRadius: RADIUS.sm,
-    backgroundColor: '#FFFFFF',
+    elevation: 1,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
   },
   itemInfo: {
     flex: 1,
-    marginLeft: SPACING.sm,
   },
   itemTitle: {
-    fontSize: 13,
-    fontWeight: '600',
+    fontSize: 14,
+    fontWeight: '700',
     color: COLORS.text,
   },
   itemPrice: {
-    fontSize: 14,
-    fontWeight: '700',
-    color: COLORS.primary,
-    marginTop: 2,
-  },
-  qtyRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: 6,
-  },
-  qtyBtn: {
-    width: 26,
-    height: 26,
-    borderRadius: 13,
-    backgroundColor: COLORS.background,
-    borderWidth: 1,
-    borderColor: COLORS.border,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  qtyBtnText: {
-    fontSize: 15,
-    fontWeight: '700',
-    color: COLORS.text,
-  },
-  qtyValue: {
-    marginHorizontal: 10,
-    fontSize: 14,
-    fontWeight: '700',
-    color: COLORS.text,
+    fontSize: 13,
+    fontWeight: '600',
+    color: COLORS.textLight,
+    marginTop: 4,
   },
   removeBtn: {
-    marginLeft: 'auto',
-    paddingHorizontal: 8,
-    paddingVertical: 4,
+    width: 36,
+    height: 36,
+    borderRadius: RADIUS.sm,
+    backgroundColor: COLORS.error,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginLeft: SPACING.sm,
   },
   removeBtnText: {
-    fontSize: 12,
-    color: COLORS.error,
-    fontWeight: '600',
+    color: '#FFFFFF',
+    fontSize: 15,
+    fontWeight: '800',
   },
   emptyContainer: {
     flex: 1,
@@ -279,59 +216,36 @@ const styles = StyleSheet.create({
     borderColor: COLORS.border,
   },
   shipBox: {
-    backgroundColor: '#F8FAFC',
-    borderRadius: RADIUS.sm,
-    padding: SPACING.sm,
-    marginBottom: SPACING.xs,
-    borderWidth: 1,
-    borderColor: COLORS.border,
+    backgroundColor: '#FFFFFF',
+    borderRadius: RADIUS.md,
+    padding: SPACING.md,
+    marginBottom: SPACING.md,
+    borderWidth: 1.5,
+    borderColor: COLORS.secondary,
   },
   shipRoomText: {
-    fontSize: 13,
+    fontSize: 15,
     fontWeight: '700',
     color: COLORS.text,
   },
   shipFeeText: {
-    fontSize: 12,
-    fontWeight: '600',
-    color: COLORS.secondary,
-    marginTop: 2,
-  },
-  summaryRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 6,
-  },
-  summaryLabel: {
-    fontSize: 13,
-    color: COLORS.textLight,
-  },
-  summaryValue: {
     fontSize: 13,
     fontWeight: '700',
-    color: COLORS.text,
+    color: COLORS.secondary,
+    marginTop: 4,
   },
-  divider: {
-    height: 1,
-    backgroundColor: COLORS.border,
-    marginVertical: 6,
-  },
-  totalLabel: {
-    fontSize: 16,
-    fontWeight: '800',
-    color: COLORS.text,
-  },
-  totalValue: {
-    fontSize: 18,
+  totalText: {
+    fontSize: 17,
     fontWeight: '800',
     color: COLORS.primary,
+    textAlign: 'center',
+    marginBottom: SPACING.sm,
   },
   orderBtn: {
     backgroundColor: COLORS.primary,
-    paddingVertical: 12,
+    paddingVertical: 13,
     borderRadius: RADIUS.md,
     alignItems: 'center',
-    marginTop: SPACING.sm,
   },
   orderBtnText: {
     color: '#FFFFFF',

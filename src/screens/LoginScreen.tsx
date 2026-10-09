@@ -19,18 +19,17 @@ export function LoginScreen() {
   const insets = useSafeAreaInsets();
   const isPhone = VARIANT.authField === 'phone';
   const defaultPlaceholder = isPhone
-    ? `SĐT — 09${STUDENT.mssv.slice(-8)}`
-    : `Email — ${STUDENT.mssv}@sv.iuh.edu.vn`;
-  const [credential, setCredential] = useState(
-    isPhone ? `09${STUDENT.mssv.slice(-8)}` : `${STUDENT.mssv}@sv.iuh.edu.vn`
-  );
+    ? 'Nhập số điện thoại (VD: 0923733021)'
+    : 'Nhập email sinh viên';
+  const [credential, setCredential] = useState('');
   const login = useAuthStore((state) => state.login);
 
   const handleLogin = () => {
-    if (!credential.trim()) {
+    const trimmed = credential.trim();
+    if (!trimmed) {
       Alert.alert(
-        'Thông báo',
-        `Vui lòng nhập ${isPhone ? 'số điện thoại' : 'email'} của bạn.`
+        'Yêu cầu nhập thông tin',
+        `Vui lòng nhập ${isPhone ? 'số điện thoại' : 'email'} của bạn để tiếp tục.`
       );
       return;
     }
